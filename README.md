@@ -1,2 +1,13 @@
-# CleanCodeProject
-Project for the Clean-Code-2022 university course. TBD!
+# CleanCodeProject - TODO
+------
+Project description. TODO
+
+------
+
+
+
+
+
+[Docs/Wiki TODO]()  
+
+[Mock-up + Design](https://www.figma.com/file/e0L6IHQpqNptKU4OqcF2zA/CleanCodeProject)
