@@ -7,24 +7,25 @@ import AuthService from '@services/auth.service';
 class AuthController {
   public authService = new AuthService();
 
-  public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public signUp = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
+      const userData: CreateUserDto = request.body;
       const signUpUserData: User = await this.authService.signup(userData);
 
-      res.status(201).json({ data: signUpUserData, message: 'signup' });
+      response.status(201).json({ data: signUpUserData, message: 'signup' });
     } catch (error) {
       next(error);
     }
   };
 
-  public logIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public logIn = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
+      const userData: CreateUserDto = request.body;
       const { cookie, findUser } = await this.authService.login(userData);
 
-      res.setHeader('Set-Cookie', [cookie]);
-      res.status(200).json({ data: findUser, message: 'login' });
+      //set token to authenticate later with
+      //response.setHeader('Set-Cookie', [cookie]);
+      response.status(200).json({ data: findUser, message: 'login' });
     } catch (error) {
       next(error);
     }
@@ -35,7 +36,7 @@ class AuthController {
       const userData: User = req.user;
       const logOutUserData: User = await this.authService.logout(userData);
 
-      res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
+      //remove auth token as well
       res.status(200).json({ data: logOutUserData, message: 'logout' });
     } catch (error) {
       next(error);

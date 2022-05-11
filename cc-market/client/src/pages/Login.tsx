@@ -17,7 +17,7 @@ export default function Login(): JSX.Element {
 
     if(username && password){
       try {
-        await authService.Login(username, password);
+        await authService.login({ email: username, password });
         navigate('../');
       } catch (error) {
         console.error(error);
@@ -32,13 +32,13 @@ export default function Login(): JSX.Element {
           <TextField
             name='username'
             id='input-email/username'
-            placeholder='Name/Email'
+            placeholder='Email'
             type='username'
             value={username}
             InputProps={{
               startAdornment: (
               <InputAdornment position='start'>
-              <AccountCircle />
+                <AccountCircle />
               </InputAdornment>
               )
             }}
@@ -54,7 +54,7 @@ export default function Login(): JSX.Element {
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
-                <VpnKeyOutlined />
+                  <VpnKeyOutlined />
                 </InputAdornment>
               )
             }}

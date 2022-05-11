@@ -1,4 +1,5 @@
 import { hash, compare } from 'bcrypt';
+import { isNil } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
 import { CreateUserDto } from '@dtos/users.dto';
@@ -6,16 +7,16 @@ import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import userModel from '@models/users.model';
-import { isEmpty } from '@utils/util';
 
 class AuthService {
   public users = userModel;
 
+  //Validate input via Validator, extend CreateUserDTO
   public async signup(userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+    if (isNil(userData)) throw new HttpException(400, 'Invalid signup data provided!');
 
     const findUser: User = this.users.find(user => user.email === userData.email);
-    if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
+    if (findUser) throw new HttpException(409, `Email ${userData.email} is already in use!`);
 
     const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = { id: this.users.length + 1, ...userData, password: hashedPassword };
@@ -24,22 +25,22 @@ class AuthService {
   }
 
   public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+    if (isNil(userData)) throw new HttpException(400, 'Invalid signin data provided!');
 
     const findUser: User = this.users.find(user => user.email === userData.email);
-    if (!findUser) throw new HttpException(409, `You're email ${userData.email} not found`);
+    if (!findUser) throw new HttpException(409, `Email ${userData.email} not found!`);
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
-    if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
+    if (!isPasswordMatching) throw new HttpException(409, 'Invalid credentials!');
 
-    const tokenData = this.createToken(findUser);
-    const cookie = this.createCookie(tokenData);
+    //const tokenData = this.createToken(findUser);
+    //const cookie = this.createCookie(tokenData);
 
-    return { cookie, findUser };
+    return { cookie: undefined, findUser };
   }
 
   public async logout(userData: User): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+    if (isNil(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: User = this.users.find(user => user.email === userData.email && user.password === userData.password);
     if (!findUser) throw new HttpException(409, "You're not user");
