@@ -23,7 +23,9 @@ jobs:
 
       - name: Test server
         run: |
-          cd ../surver
+          pwd
+          ls
+          cd ./surver
           npm install
           npm run test
 
