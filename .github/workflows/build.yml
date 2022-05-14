@@ -17,15 +17,13 @@ jobs:
 
       - name: Test client
         run: |
-          pwd
-          ls
           cd ./client
           npm install
           npm run test
 
       - name: Test server
         run: |
-          cd ./surver
+          cd ../surver
           npm install
           npm run test
 
