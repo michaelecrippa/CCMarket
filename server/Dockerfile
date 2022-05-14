@@ -12,4 +12,6 @@ EXPOSE 8080
 
 ENV NODE_ENV production
 
-CMD ["npm", "run", "start"]
+RUN npm run build
+
+CMD ["npm", "run", "dev"]
