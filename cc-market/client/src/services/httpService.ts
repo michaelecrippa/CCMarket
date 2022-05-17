@@ -13,7 +13,8 @@ class HttpService {
   private async request<T>(path: string, method: string, body?: Record<string, any>){
     const userToken = authService.storedUser?.token;
 
-    const server_url: string = import.meta.url;
+    //use env data
+    const server_url: string = 'http://localhost:3001/';
     const response = await fetch(`${server_url}${path}`, {
       method,
       headers: {

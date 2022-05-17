@@ -1,38 +1,55 @@
-import { FormEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
-import { authService } from '../services/authService';
+import { userService } from '../services/userService';
 
 import { Button, CircularProgress, Container, TextField, Typography, MenuItem} from '@mui/material';
 
 const genders = [
-  {value: 'Female'},
-  {value: 'Male'},
-  {value: 'Other'},
+  {key: 1, value: 'Female'},
+  {key: 2, value: 'Male'},
+  {key: 3, value: 'Other'},
 ];
 
 const nations = [
-  {value: 'Bulgarian'},
-  {value: 'Italian'},
+  {key: 1, value: 'Bulgarian'},
+  {key: 2, value: 'Italian'},
   //TODO and extract
 ]
 
-export default function Register() {
-  const loading = true; // TODO
+interface UserInformation {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  sex: string;
+  nationality: string;
+}
 
-  const [userValues, setUserValues] = useState({
+export default function Register() {
+  let loading = false; // TODO show loading indicator until response received
+
+  const [userInformation, setUserInformation] = useState({
     name: '',
     email:'',
     password:'',
     confirmPassword: '',
     sex: '',
     nationality: ''
-  });
+  } as UserInformation);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
 
-    //TODO
-    await authService.Register(userValues);
+    await userService.createUser(userInformation);
+  }
+
+  function handleFormFieldUpdate(inputFieldName: keyof UserInformation) { 
+    return (valueUpdatedEvent: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setUserInformation(userInformation => {
+        userInformation[inputFieldName] = valueUpdatedEvent.target.value;
+        return userInformation;
+      })
+    }
   }
 
   return (
@@ -46,32 +63,33 @@ export default function Register() {
        <form onSubmit={submit}>
          <TextField
           label="Name"
-          value={userValues.name} />
+          onChange={handleFormFieldUpdate('name')} />
 
         <TextField
           label="Email"
-          value={userValues.email}
+          type='email'
+          onChange={handleFormFieldUpdate('email')}
         />
 
         <TextField
           label="Password"
-          value={userValues.password}
+          onChange={handleFormFieldUpdate('password')}
           type='password'
         />
 
         <TextField
           label="Confirm password"
-          value={userValues.confirmPassword}
+          onChange={handleFormFieldUpdate('confirmPassword')}
           type='password'
         />
 
         <TextField
           label="Gender"
-          value={userValues.sex}
+          onChange={handleFormFieldUpdate('sex')}
           select
         > 
           {genders.map((option) => (
-            <MenuItem value={option.value}>
+            <MenuItem key={option.key} value={option.value}>
               {option.value}
             </MenuItem>
           ))}
@@ -79,11 +97,11 @@ export default function Register() {
 
         <TextField
           label="Nationality"
-          value={userValues.nationality}
+          onChange={handleFormFieldUpdate('nationality')}
           select
         > 
           {nations && nations.map((option) => (
-            <MenuItem value={option.value}>
+            <MenuItem key={option.key} value={option.value}>
               {option.value}
             </MenuItem>
           ))}

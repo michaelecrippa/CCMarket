@@ -43,7 +43,7 @@ export class AuthService {
 
   
   async login({email, password} : LoginProps) {
-    const userAuth = await httpService.post<UserAuth>('/login', {
+    const userAuth = await httpService.post<UserAuth>('login', {
       email,
       password
     });
