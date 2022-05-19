@@ -12,6 +12,6 @@ EXPOSE 8080
 
 ENV NODE_ENV production
 
-RUN npm run build
+RUN npm run build:tsc
 
 CMD ["npm", "run", "dev"]
