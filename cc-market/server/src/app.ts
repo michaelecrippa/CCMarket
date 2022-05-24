@@ -11,21 +11,28 @@ import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import { Sequelize } from 'sequelize-typescript';
+import { DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_HOST, DATABASE_PORT, DATABASE_DIALECT } from '@config';
+import { Dialect } from 'sequelize/types';
+
+import { user } from './database/models/User';
 
 class App {
   public app: express.Application;
   public env: string;
   public port: string | number;
+  public sqlRepo: Sequelize;
 
   constructor(routes: Routes[]) {
     this.app = express();
     this.env = NODE_ENV || 'development';
-    this.port = PORT || 3000;
+    this.port = PORT || 8080;
 
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initializeRepository();
   }
 
   public listen() {
@@ -76,6 +83,22 @@ class App {
 
   private initializeErrorHandling() {
     this.app.use(errorMiddleware);
+  }
+
+  private initializeRepository() {
+    this.sqlRepo = this.sqlRepo = new Sequelize({
+      database: DATABASE_NAME,
+      username: DATABASE_USERNAME,
+      password: DATABASE_PASSWORD,
+      host: DATABASE_HOST,
+      port: Number(DATABASE_PORT),
+      dialect: DATABASE_DIALECT as Dialect,
+      define: {
+        timestamps: false,
+      },
+    });
+
+    this.sqlRepo.addModels([user]);
   }
 }
 

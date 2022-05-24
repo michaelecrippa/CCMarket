@@ -14,7 +14,7 @@ class HttpService {
     const userToken = authService.storedUser?.token;
 
     //use env data
-    const server_url: string = 'http://localhost:3001/';
+    const server_url: string = 'http://localhost:8080/';
     const response = await fetch(`${server_url}${path}`, {
       method,
       headers: {

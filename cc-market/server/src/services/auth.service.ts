@@ -7,6 +7,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import userModel from '@models/users.model';
+import { user as UserModel } from '../database/models/User';
 
 class AuthService {
   public users = userModel;
@@ -15,20 +16,18 @@ class AuthService {
   public async signup(userData: CreateUserDto): Promise<User> {
     if (isNil(userData)) throw new HttpException(400, 'Invalid signup data provided!');
 
-    const findUser: User = this.users.find(user => user.email === userData.email);
+    const findUser = await UserModel.findOne({ where: { email: userData.email } });
     if (findUser) throw new HttpException(409, `Email ${userData.email} is already in use!`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = { id: this.users.length + 1, email: userData.email, password: hashedPassword };
-
-    this.users.push(createUserData);
+    const createUserData = await UserModel.create({ username: 'Template', email: userData.email, password: hashedPassword });
     return createUserData;
   }
 
   public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
     if (isNil(userData)) throw new HttpException(400, 'Invalid signin data provided!');
 
-    const findUser: User = this.users.find(user => user.email === userData.email);
+    const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, `Email ${userData.email} not found!`);
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
