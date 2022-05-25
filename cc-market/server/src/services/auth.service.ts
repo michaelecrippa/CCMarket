@@ -20,8 +20,21 @@ class AuthService {
     if (findUser) throw new HttpException(409, `Email ${userData.email} is already in use!`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData = await UserModel.create({ username: 'Template', email: userData.email, password: hashedPassword });
-    return createUserData;
+    try {
+      const createUserData = await UserModel.create({
+        username: userData.userName,
+        email: userData.email,
+        password: hashedPassword,
+        first_name: userData.firstName,
+        last_name: userData.lastName,
+        picture_uri: '', //TODO save pictures and store the uri in the database
+        created_at: new Date(),
+      });
+
+      return createUserData;
+    } catch {
+      throw new HttpException(500, 'Saving new user was not successful!');
+    }
   }
 
   public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {

@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { userService } from '../services/userService';
 
@@ -17,7 +18,9 @@ const nations = [
 ]
 
 interface UserInformation {
-  name: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -28,8 +31,11 @@ interface UserInformation {
 export default function Register() {
   let loading = false; // TODO show loading indicator until response received
 
+  const navigate = useNavigate();
   const [userInformation, setUserInformation] = useState({
-    name: '',
+    userName: '',
+    firstName: '',
+    lastName: '',
     email:'',
     password:'',
     confirmPassword: '',
@@ -40,7 +46,10 @@ export default function Register() {
   async function submit(event: FormEvent) {
     event.preventDefault();
 
-    await userService.createUser(userInformation);
+    if (await userService.createUser(userInformation)) {
+      navigate('/login');
+    }
+    // TODO add some error handling and notify the user
   }
 
   function handleFormFieldUpdate(inputFieldName: keyof UserInformation) { 
@@ -61,9 +70,17 @@ export default function Register() {
         </Typography>
 
        <form onSubmit={submit}>
+        <TextField
+          label="Username"
+          onChange={handleFormFieldUpdate('userName')} />
+
          <TextField
-          label="Name"
-          onChange={handleFormFieldUpdate('name')} />
+          label="First Name"
+          onChange={handleFormFieldUpdate('firstName')} />
+
+        <TextField
+          label="Last Name"
+          onChange={handleFormFieldUpdate('lastName')} />
 
         <TextField
           label="Email"

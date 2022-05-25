@@ -15,7 +15,7 @@ export class Asset extends Model {
   @NotNull
   price: number;
 
-  //TODO
+  //TODO add missing properties
 }
 
 // export const Asset = sequelize.define('assets', {

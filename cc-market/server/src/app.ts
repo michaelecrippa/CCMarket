@@ -86,7 +86,7 @@ class App {
   }
 
   private initializeRepository() {
-    this.sqlRepo = this.sqlRepo = new Sequelize({
+    this.sqlRepo = new Sequelize({
       database: DATABASE_NAME,
       username: DATABASE_USERNAME,
       password: DATABASE_PASSWORD,
