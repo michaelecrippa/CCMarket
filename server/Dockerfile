@@ -14,4 +14,4 @@ ENV NODE_ENV production
 
 RUN npm run build:tsc
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "build"]
