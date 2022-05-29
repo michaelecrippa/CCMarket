@@ -21,17 +21,17 @@ jobs:
           cd ./client
           npm install
           npm run test
-        env:
-          NODE_ENV: development
-          PORT: 8080
-          LOG_FORMAT: combined
-          LOG_DIR: ./logs
 
       - name: Test server
         run: |
           cd ./server
           npm install
           npm run test
+        env:
+          NODE_ENV: development
+          PORT: 8080
+          LOG_FORMAT: combined
+          LOG_DIR: ./logs
 
   build:
     runs-on: ubuntu-latest
