@@ -2,18 +2,21 @@ import { hash, compare } from 'bcrypt';
 import { isNil } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
-import { CreateUserDto } from '@dtos/users.dto';
+
+import { CreateUserDTO } from '@/dtos/create-user.dto';
+import { LoginUserDTO } from '@/dtos/login-user.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import userModel from '@models/users.model';
+
 import { user as UserModel } from '../database/models/User';
 
 class AuthService {
   public users = userModel;
 
-  //Validate input via Validator, extend CreateUserDTO
-  public async signup(userData: CreateUserDto): Promise<User> {
+  //TODO Validate input via Validator, extend CreateUserDTO
+  public async signup(userData: CreateUserDTO): Promise<User> {
     if (isNil(userData)) throw new HttpException(400, 'Invalid signup data provided!');
 
     const findUser = await UserModel.findOne({ where: { email: userData.email } });
@@ -37,7 +40,7 @@ class AuthService {
     }
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: LoginUserDTO): Promise<{ cookie: string; findUser: User }> {
     if (isNil(userData)) throw new HttpException(400, 'Invalid signin data provided!');
 
     const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
