@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { Container, FormControl, Button, InputAdornment, TextField } from '@mui/material';
+import { Container, FormControl, Button, InputAdornment, TextField, Link } from '@mui/material';
 import { Forward, VpnKeyOutlined, AccountCircle } from '@mui/icons-material';
 
 import { authService } from '../services/authService';
@@ -79,6 +79,10 @@ export default function Login(): JSX.Element {
           > Log in </Button>
         </FormControl>
       </form>
+
+      <Link href="/Register" variant="body2">
+        New here? Register now!
+      </Link>
     </Container>
   );
 }

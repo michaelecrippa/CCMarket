@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { userService } from '../services/userService';
 
-import { Button, CircularProgress, Container, TextField, Typography, MenuItem} from '@mui/material';
+import { Button, CircularProgress, Container, TextField, Typography, MenuItem, Link } from '@mui/material';
 
 const genders = [
   {key: 1, value: 'Female'},
@@ -132,6 +132,10 @@ export default function Register() {
           {loading ? <CircularProgress /> : 'Submit'}
         </Button>
       </form>
+
+      <Link href="/Login" variant="body2">
+        Already registered? Login now!
+      </Link>
     </Container>
   );
 }
