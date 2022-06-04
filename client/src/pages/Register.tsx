@@ -71,6 +71,7 @@ export default function Register() {
 
        <form onSubmit={submit}>
         <TextField
+          required
           label="Username"
           onChange={handleFormFieldUpdate('userName')} />
 
@@ -83,18 +84,21 @@ export default function Register() {
           onChange={handleFormFieldUpdate('lastName')} />
 
         <TextField
+          required
           label="Email"
           type='email'
           onChange={handleFormFieldUpdate('email')}
         />
 
         <TextField
+          required
           label="Password"
           onChange={handleFormFieldUpdate('password')}
           type='password'
         />
 
         <TextField
+          required
           label="Confirm password"
           onChange={handleFormFieldUpdate('confirmPassword')}
           type='password'

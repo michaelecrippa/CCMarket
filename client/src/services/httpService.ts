@@ -1,5 +1,6 @@
 import { HttpError } from '../errors/httpError'
 import { authService } from '../services/authService';
+import { REACT_APP_SERVER_ADDRESS as serverURL } from '../config/index';
 
 class HttpService {
   async get<T>(path: string) { 
@@ -13,9 +14,7 @@ class HttpService {
   private async request<T>(path: string, method: string, body?: Record<string, any>){
     const userToken = authService.storedUser?.token;
 
-    //use env data
-    const server_url: string = 'http://localhost:8080/';
-    const response = await fetch(`${server_url}${path}`, {
+    const response = await fetch(`${serverURL}/${path}`, {
       method,
       headers: {
         'Content-Type': 'application/json',
