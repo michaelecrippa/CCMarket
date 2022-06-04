@@ -6,21 +6,22 @@ import { SECRET_KEY } from '@config';
 import { CreateUserDTO } from '@/dtos/create-user.dto';
 import { LoginUserDTO } from '@/dtos/login-user.dto';
 import { HttpException } from '@exceptions/HttpException';
+import { ValidationError } from '../exceptions/ValidationException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
-import userModel from '@models/users.model';
+import { RegistrationValidator } from '@/validators/userRegistrationValidator';
 
 import { user as UserModel } from '../database/models/User';
 
 class AuthService {
-  public users = userModel;
-
   //TODO Validate input via Validator, extend CreateUserDTO
   public async signup(userData: CreateUserDTO): Promise<User> {
-    if (isNil(userData)) throw new HttpException(400, 'Invalid signup data provided!');
-
-    const findUser = await UserModel.findOne({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `Email ${userData.email} is already in use!`);
+    try {
+      new RegistrationValidator(userData).validate();
+    } catch (exception) {
+      const e: ValidationError = exception;
+      throw new HttpException(409, e.message);
+    }
 
     const hashedPassword = await hash(userData.password, 10);
     try {
@@ -58,7 +59,7 @@ class AuthService {
   public async logout(userData: User): Promise<User> {
     if (isNil(userData)) throw new HttpException(400, "You're not userData");
 
-    const findUser: User = this.users.find(user => user.email === userData.email && user.password === userData.password);
+    const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, "You're not user");
 
     return findUser;

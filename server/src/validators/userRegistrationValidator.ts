@@ -1,9 +1,11 @@
-import { UserInput } from '@/services/users.service';
 import { ValidationError } from '../exceptions/ValidationException';
-import userModel from '@models/users.model';
+import { user as UserModel } from '../database/models/User';
+import { CreateUserDTO } from '@/dtos/create-user.dto';
+
+import { isNil } from 'lodash';
 
 export class RegistrationValidator {
-  constructor(private user: UserInput) {}
+  constructor(private user: CreateUserDTO) {}
 
   validate() {
     this.validateInput();
@@ -11,7 +13,9 @@ export class RegistrationValidator {
   }
 
   private validateInput() {
-    if (this.user.name.length > 255) {
+    if (isNil(this.user)) throw new ValidationError('user', 'Invalid signup data provided!');
+
+    if (this.user.userName.length > 255) {
       throw new ValidationError('name', 'Username must be shorter than 256 characters!');
     }
 
@@ -24,19 +28,15 @@ export class RegistrationValidator {
       throw new ValidationError('email', 'Email must be in xxxx@xxx.xxx format');
     }
 
-    if (this.user.password != this.user.confirmPassword) {
-      throw new ValidationError('password', 'Password must match confirmation!');
-    }
-
     if (!this.user.password.match(/^(?=.*\d).{4,12}$/)) {
       throw new ValidationError('password', 'Password must be between 4 and 12 characters and contain a digit!');
     }
   }
 
   private async validateEmailUniqueness() {
-    const matchingEmail = userModel.find(user => user.email == this.user.name);
+    const emailAlreadyInUse = await UserModel.findOne({ where: { email: this.user.email } });
 
-    if (matchingEmail) {
+    if (emailAlreadyInUse) {
       throw new ValidationError('email', 'Email is already in use!');
     }
   }
