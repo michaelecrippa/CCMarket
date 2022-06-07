@@ -1,4 +1,4 @@
-# CleanCodeProject - TODO
+# CCMarket
 ------
 Project description. TODO
 

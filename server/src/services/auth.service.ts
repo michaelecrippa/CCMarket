@@ -1,47 +1,65 @@
 import { hash, compare } from 'bcrypt';
+import { isNil } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
-import { CreateUserDto } from '@dtos/users.dto';
+
+import { CreateUserDTO } from '@/dtos/create-user.dto';
+import { LoginUserDTO } from '@/dtos/login-user.dto';
 import { HttpException } from '@exceptions/HttpException';
+import { ValidationError } from '../exceptions/ValidationException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
-import userModel from '@models/users.model';
-import { isEmpty } from '@utils/util';
+import { RegistrationValidator } from '@/validators/userRegistrationValidator';
+
+import { user as UserModel } from '../database/models/User';
 
 class AuthService {
-  public users = userModel;
-
-  public async signup(userData: CreateUserDto): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
-
-    const findUser: User = this.users.find(user => user.email === userData.email);
-    if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
+  //TODO Validate input via Validator, extend CreateUserDTO
+  public async signup(userData: CreateUserDTO): Promise<User> {
+    try {
+      new RegistrationValidator(userData).validate();
+    } catch (exception) {
+      const e: ValidationError = exception;
+      throw new HttpException(409, e.message);
+    }
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = { id: this.users.length + 1, ...userData, password: hashedPassword };
+    try {
+      const createUserData = await UserModel.create({
+        username: userData.userName,
+        email: userData.email,
+        password: hashedPassword,
+        first_name: userData.firstName,
+        last_name: userData.lastName,
+        picture_uri: '', //TODO save pictures and store the uri in the database
+        created_at: new Date(),
+      });
 
-    return createUserData;
+      return createUserData;
+    } catch {
+      throw new HttpException(500, 'Saving new user was not successful!');
+    }
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+  public async login(userData: LoginUserDTO): Promise<{ cookie: string; findUser: User }> {
+    if (isNil(userData)) throw new HttpException(400, 'Invalid signin data provided!');
 
-    const findUser: User = this.users.find(user => user.email === userData.email);
-    if (!findUser) throw new HttpException(409, `You're email ${userData.email} not found`);
+    const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
+    if (!findUser) throw new HttpException(409, `Email ${userData.email} not found!`);
 
     const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
-    if (!isPasswordMatching) throw new HttpException(409, "You're password not matching");
+    if (!isPasswordMatching) throw new HttpException(409, 'Invalid credentials!');
 
-    const tokenData = this.createToken(findUser);
-    const cookie = this.createCookie(tokenData);
+    //const tokenData = this.createToken(findUser);
+    //const cookie = this.createCookie(tokenData);
 
-    return { cookie, findUser };
+    return { cookie: undefined, findUser };
   }
 
   public async logout(userData: User): Promise<User> {
-    if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
+    if (isNil(userData)) throw new HttpException(400, "You're not userData");
 
-    const findUser: User = this.users.find(user => user.email === userData.email && user.password === userData.password);
+    const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, "You're not user");
 
     return findUser;
