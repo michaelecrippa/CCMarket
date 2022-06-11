@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { userService } from '../services/userService';
+import PagesUriConstnts from '../constants/uriConstants';
 
 import { Button, CircularProgress, Container, TextField, Typography, MenuItem, Link } from '@mui/material';
 
@@ -47,7 +48,7 @@ export default function Register() {
     event.preventDefault();
 
     if (await userService.createUser(userInformation)) {
-      navigate('/login');
+      navigate(PagesUriConstnts.LoginUri);
     }
     // TODO add some error handling and notify the user
   }
@@ -133,7 +134,7 @@ export default function Register() {
         </Button>
       </form>
 
-      <Link href="/Login" variant="body2">
+      <Link href={PagesUriConstnts.LoginUri} variant="body2">
         Already registered? Login now!
       </Link>
     </Container>

@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
+
 import { CreateUserDTO } from '@/dtos/create-user.dto';
 import { RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import AuthService from '@services/auth.service';
+import { HttpException } from '@exceptions/HttpException';
+import { ValidationError } from '@exceptions/ValidationException';
+import { RegistrationValidator } from '@/validators/userRegistrationValidator';
 
 class AuthController {
   public authService = new AuthService();
@@ -10,6 +14,14 @@ class AuthController {
   public signUp = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: CreateUserDTO = request.body;
+
+      try {
+        new RegistrationValidator(userData).validate();
+      } catch (exception) {
+        const e: ValidationError = exception;
+        throw new HttpException(409, e.message);
+      }
+
       const signUpUserData: User = await this.authService.signup(userData);
 
       response.status(201).json({ data: signUpUserData, message: 'signup' });

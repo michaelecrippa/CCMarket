@@ -1,16 +1,19 @@
-import { Table, Column, Model, PrimaryKey, NotNull, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model } from 'sequelize-typescript';
 
 @Table
-export class NasaAsset extends Model {
-  @Column
-  @PrimaryKey
-  @AutoIncrement
+export class nasa_asset extends Model {
+  @Column({ primaryKey: true })
   id: number;
 
-  @Column
-  @NotNull
+  @Column({ allowNull: false, unique: true })
   name: string;
 
   @Column
-  date: Date;
+  description: string;
+
+  @Column
+  created_at: Date;
+
+  @Column
+  updated_at: Date;
 }
