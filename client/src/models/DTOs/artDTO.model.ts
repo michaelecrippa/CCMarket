@@ -14,5 +14,5 @@ export class ArtEntityDTO {
     this.nasaAssetId = 0; 
     this.author = '';
     this.owner = '';
-  } 
+  }
 }

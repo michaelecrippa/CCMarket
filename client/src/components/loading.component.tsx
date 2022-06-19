@@ -1,12 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
-import { ReactNode } from 'react';
 
-export interface LoadingProps<T> {
-  error: any;
-  loading: boolean;
-
-  children: (() => ReactNode) | ReactNode;
-}
+import { LoadingProps } from '../interfaces/components/Loading';
 
 export function Loading<T>({ loading, error, children }: LoadingProps<T>) {
   if (loading) {

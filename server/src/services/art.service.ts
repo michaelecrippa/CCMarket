@@ -1,4 +1,4 @@
-import { asset } from '@/database/models/Asset';
+import { asset as ArtAsset } from '@/database/models/Asset';
 import { ArtAssetDTO } from '@/dtos/artAsset.dto';
 import { HttpException } from '@exceptions/HttpException';
 
@@ -7,7 +7,7 @@ class ArtService {
     try {
       const userId = 1; // use user's id when available
 
-      await asset.create({
+      await ArtAsset.create({
         name: artAsset.name,
         price: artAsset.price,
         description: artAsset.description,
@@ -20,6 +20,14 @@ class ArtService {
       });
     } catch (ex) {
       throw new HttpException(500, 'Saving new user was not successful!');
+    }
+  }
+
+  public getEntity(entityName: string): Promise<ArtAsset> {
+    try {
+      return ArtAsset.findOne({ where: { name: entityName } });
+    } catch (ex) {
+      throw new HttpException(500, `Retrieving entity with name:${entityName} failed!`);
     }
   }
 }

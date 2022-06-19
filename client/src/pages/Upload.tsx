@@ -1,8 +1,6 @@
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { ArtEntityDTO } from '../models/DTOs/art-dto.model';
-
 import { 
   Container, 
   CircularProgress, 
@@ -20,12 +18,14 @@ import {
 import NasaAssetSelection from '../components/nasaAssetSelection.component';
 
 import { artEntityService } from '../services/artEntityService';
+import { ArtEntityDTO } from '../models/DTOs/artDTO.model';
 
 import PagesUriConstnts from '../constants/uriConstants';
 
 export default function Upload(): JSX.Element {
   const [entityData, setEntityData] = useState(new ArtEntityDTO());
   const navigate = useNavigate();
+
   const handleEntityDataChange =
   (prop: keyof ArtEntityDTO) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setEntityData({ ...entityData, [prop]: event.target.value });
@@ -46,11 +46,12 @@ export default function Upload(): JSX.Element {
       <form onSubmit={createEntity}>
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
+            {/* Add Name uniqueness validation */}
             <TextField 
               required 
               name="entity-name" 
-              placeholder="Name" 
-              value={entityData.name} 
+              placeholder="Name"
+              value={entityData.name}
               onChange={handleEntityDataChange('name')}
             />
           </FormGroup>
@@ -75,7 +76,8 @@ export default function Upload(): JSX.Element {
           </FormGroup>
           <FormGroup>
             <TextField
-              label="Description" 
+              label="Description"
+              value={entityData.description}
               inputProps={{
                 maxLength: 144,
               }}
@@ -83,8 +85,9 @@ export default function Upload(): JSX.Element {
             />
           </FormGroup>
           <FormGroup>
-            <NasaAssetSelection onClick={handleEntityDataChange('nasaAssetId')}/>
+            <NasaAssetSelection onClick={handleEntityDataChange('nasaAssetId')} artEntityProp={entityData.nasaAssetId}/>
           </FormGroup>
+          {/* Disable when invalid DTO */}
           <Button type="submit" variant="contained" disabled={false}>
             {false ? <CircularProgress /> : 'Upload and list to the market'}
           </Button>

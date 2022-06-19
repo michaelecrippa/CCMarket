@@ -5,7 +5,7 @@ import { Container, FormControl, Button, InputAdornment, TextField, Link } from 
 import { Forward, VpnKeyOutlined, AccountCircle } from '@mui/icons-material';
 
 import { authService } from '../services/authService';
-import { UserDTO } from '../models/DTOs/user-dto.model';
+import { UserDTO } from '../models/DTOs/userDTO.model';
 import PagesUriConstnts from '../constants/uriConstants';
 
 export default function Login(): JSX.Element {

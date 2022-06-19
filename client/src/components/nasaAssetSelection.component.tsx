@@ -1,33 +1,56 @@
 import { nasaEntityService } from '../services/nasaEntityService';
-import { NasaEntityDTO } from '../models/DTOs/nasa-dto.model';
-import { Loading } from './loading';
-import { useAsync } from '../hooks/useAsync';
+import { NasaEntityDTO } from '../models/DTOs/nasaDTO.model';
+import { Loading } from './loading.component';
+import { NasaAssetSelectionState, NasaAssetSelectionProps } from '../interfaces/components/NasaAssetSelection';
 
 import {
   TextField,
   MenuItem, 
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 
-interface NasaAssetSelectionProps {
-  onClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+const defaultNasaEntity: NasaEntityDTO = { 
+  id: 0, 
+  name: "Select NASA entity", 
+  description: "default value"
+};
 
-export default function NasaAssetSelection({ onClick } : NasaAssetSelectionProps) {
-  console.log('ent');
-  const { data: nasaAssets, error, loading } = 
-    useAsync<NasaEntityDTO[]>(() => nasaEntityService.getEntities(), []);
+export default function NasaAssetSelection({ onClick, artEntityProp } : NasaAssetSelectionProps) {
+  const [componentState, setComponentState] = useState<NasaAssetSelectionState>({
+    availableNasaEntities: [], 
+    loading: true, 
+    error: undefined 
+  });
+
+  const getNasaEntities = async () => {
+    try {
+      const nasaEntities = await nasaEntityService.getEntities();
+      
+      nasaEntities.unshift(defaultNasaEntity);
+      setComponentState({ availableNasaEntities: nasaEntities, loading: false, error: undefined });
+    } catch(exception) {
+      setComponentState({ availableNasaEntities: [], loading: false, error: exception });
+    }
+  }
+
+  useEffect(() => { getNasaEntities(); }, [])
+
   return (
-    <Loading loading={loading} error={error}>
+    <Loading loading={componentState.loading} error={componentState.error}>
       <TextField
+        required
         select
-        label="NasaAsset"
+        label="NasaAssets"
         onChange={onClick}
+        value={artEntityProp}
       >
         {
-          nasaAssets ?
-          nasaAssets.map(
-            (asset: NasaEntityDTO) => <MenuItem value={asset.id}>{asset.name}</MenuItem>
-          ) : <MenuItem></MenuItem>
+          componentState.availableNasaEntities.map(
+            (asset: NasaEntityDTO) => 
+            <MenuItem key={asset.id} value={asset.id}>
+              {asset.name}
+            </MenuItem>
+          )
         }
       </TextField>
     </Loading>

@@ -1,5 +1,5 @@
 import { httpService } from './httpService';
-import { ArtEntityDTO } from '../models/DTOs/art-dto.model';
+import { ArtEntityDTO } from '../models/DTOs/artDTO.model';
 
 class ArtEntityService {
   createEntity(entityInput: ArtEntityDTO): Promise<boolean> {
