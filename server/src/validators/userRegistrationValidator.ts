@@ -1,5 +1,5 @@
 import { ValidationError } from '../exceptions/ValidationException';
-import { CreateUserDTO } from '@/dtos/create-user.dto';
+import { CreateUserDTO } from '@/dtos/createUser.dto';
 
 import UserService from '@/services/users.service';
 
@@ -17,7 +17,9 @@ export class RegistrationValidator {
   }
 
   private validateInput() {
-    if (isNil(this.user)) throw new ValidationError('user', 'Invalid signup data provided!');
+    if (isNil(this.user)) {
+      throw new ValidationError('user', 'Invalid signup data provided!');
+    }
 
     if (isEmpty(this.user.userName)) {
       throw new ValidationError('userName', 'Username cannot be emtpy!');
