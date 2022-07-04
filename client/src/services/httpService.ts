@@ -32,9 +32,9 @@ class HttpService {
         }
         throw new HttpError(response, responseBody);
     }
-    const responseBody: T = await response.json();
+    const responseBody: { data: T} = await response.json();
 
-    return responseBody;
+    return responseBody.data;
   }
 }
 
