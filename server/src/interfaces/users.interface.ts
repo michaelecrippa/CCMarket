@@ -1,6 +1,9 @@
 export interface User {
   id: number;
   email: string;
-  password: string;
-  //To do align/link user to database model
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  profilePicture?: string;
+  authToken?: string;
 }

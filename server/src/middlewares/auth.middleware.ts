@@ -14,7 +14,7 @@ export const authMiddleware: RequestHandler = async (request: Request, response:
 
   const header = parseBasicAuth(authHeader);
 
-  const { cookie, findUser: user } = await authService.login({ email: header.name, password: header.pass });
+  const { cookie, user } = await authService.login({ email: header.name, password: header.pass });
 
   if (isNil(user)) {
     return response.status(401).json({ error: 'User not found!' });

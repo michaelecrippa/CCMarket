@@ -1,25 +1,17 @@
-import { UserDTO } from '../models/DTOs/user-dto.model';
+import { UserDTO } from '../models/DTOs/userDTO.model';
 import { httpService } from './httpService';
+import { UserAuth } from '../interfaces/user/UserAuth.interface';
 
-export interface UserAuth {
-  id: number,
-  name: string,
-  email: string,
-  sex?: string,
-  nationality?: string,
-  token: string
-}
-
-type UserChangeHandler = (user: UserAuth | null) => void;
+type UserChangeHandler = (user: UserAuth | undefined) => void;
 
 export class AuthService {
-  private handler: UserChangeHandler | null = null;
+  private handler: UserChangeHandler | undefined = undefined;
   
-  set changeHandler(handler: UserChangeHandler | null) {
+  set changeHandler(handler: UserChangeHandler | undefined) {
     this.handler = handler;
   }
 
-  private setCurrentUser(user: UserAuth | null) {
+  private setCurrentUser(user: UserAuth | undefined) {
     if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
     } else {
@@ -29,11 +21,11 @@ export class AuthService {
     this.handler?.(user);
   }
 
-  get storedUser(): UserAuth | null {
+  get storedUser(): UserAuth | undefined {
     const userJson = localStorage.getItem('currentUser');
     const currentUser: UserAuth =  userJson && JSON.parse(userJson);  
 
-    return currentUser ?? null;
+    return currentUser ?? undefined;
   }
 
   
@@ -47,7 +39,7 @@ export class AuthService {
   }
 
   logout() {
-    this.setCurrentUser(null);
+    this.setCurrentUser(undefined);
   }
 }
 
