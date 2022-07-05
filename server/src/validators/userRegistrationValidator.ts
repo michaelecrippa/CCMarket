@@ -5,7 +5,7 @@ import { CreateUserDTO } from '@/dtos/create-user.dto';
 import { isNil } from 'lodash';
 
 export class RegistrationValidator {
-  constructor(private user: CreateUserDTO) {}
+  constructor(private user: CreateUserDTO) { }
 
   validate() {
     this.validateInput();
@@ -22,9 +22,10 @@ export class RegistrationValidator {
     if (this.user.email.length > 255) {
       throw new ValidationError('email', 'Email must be shorter than 256 characters!');
     }
-    const emailRegexPattern =
-      '/^(([^<>()[]\\.,;:s@"]+(.[^<>()[]\\.,;:s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/';
-    if (!this.user.email.match(emailRegexPattern)) {
+
+    const emailRegexPattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    if (!emailRegexPattern.test(this.user.email)) {
+      console.log(this.user.email);
       throw new ValidationError('email', 'Email must be in xxxx@xxx.xxx format');
     }
 
