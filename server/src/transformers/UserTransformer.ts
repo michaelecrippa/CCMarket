@@ -8,6 +8,16 @@ export class UserTransformer {
       username: user.username,
       email: user.email,
       profilePicture: user.picture_uri,
+      bio: user.bio,
+
+      // TODO: to extract this into a separate ArtAssetTransformer
+      assets: user.userAssets.map(userAsset => {
+        return {
+          name: userAsset.name,
+          price: userAsset.price,
+          pictureUri: userAsset.picture_uri,
+        }
+      })
     };
   }
 

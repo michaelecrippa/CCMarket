@@ -6,4 +6,8 @@ export interface User {
   lastName?: string;
   profilePicture?: string;
   authToken?: string;
+  bio?: string;
+
+  // TODO: make a separate ArtAssetDTO for assets[]. 
+  assets?: object[];
 }

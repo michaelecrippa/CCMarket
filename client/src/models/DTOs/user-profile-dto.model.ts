@@ -1,7 +1,8 @@
 export interface UserProfileDto {
-  name: string;
+  username: string;
   description: string;
-  pictureUri: string;
+  profilePicture: string;
+  bio: string;
   assets: UserAsset[];
 }
 

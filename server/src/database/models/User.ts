@@ -1,4 +1,5 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany } from 'sequelize-typescript';
+import { asset } from './Asset';
 
 @Table
 export class user extends Model {
@@ -31,4 +32,10 @@ export class user extends Model {
 
   @Column
   token: string;
+
+  @Column
+  bio: string;
+
+  @HasMany(() => asset)
+  userAssets: asset[];
 }
