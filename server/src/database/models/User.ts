@@ -28,7 +28,4 @@ export class user extends Model {
 
   @Column
   updated_at: Date;
-
-  @Column
-  token: string;
 }

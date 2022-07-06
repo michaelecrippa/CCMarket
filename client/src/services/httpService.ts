@@ -1,5 +1,4 @@
 import { HttpError } from '../errors/httpError'
-import { authService } from '../services/authService';
 import { REACT_APP_SERVER_ADDRESS as serverURL } from '../config/index';
 
 class HttpService {
@@ -12,13 +11,12 @@ class HttpService {
   }
 
   private async request<T>(path: string, method: string, body?: Record<string, any>){
-    const userToken = authService.storedUser?.token;
-
     const response = await fetch(`${serverURL}/${path}`, {
       method,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        ...(userToken ? {'Authorization': `Bearer ${userToken}`} : undefined),
+        'Accept': 'application/json',
       },
       body: body && JSON.stringify(body),
     }); 

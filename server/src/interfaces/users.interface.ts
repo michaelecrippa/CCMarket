@@ -5,5 +5,4 @@ export interface User {
   firstName?: string;
   lastName?: string;
   profilePicture?: string;
-  authToken?: string;
 }

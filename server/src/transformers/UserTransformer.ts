@@ -10,14 +10,4 @@ export class UserTransformer {
       profilePicture: user.picture_uri,
     };
   }
-
-  transformWithToken(user: DataBaseUserModel): UserDTO {
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      profilePicture: user.picture_uri,
-      authToken: user.token,
-    };
-  }
 }
