@@ -1,4 +1,6 @@
+import { User } from '@/interfaces/users.interface';
 import userService from '@services/users.service';
+import { NextFunction, Request, Response } from 'express';
 
 class UsersController {
   public userService = new userService();
