@@ -1,11 +1,15 @@
 import { ValidationError } from '../exceptions/ValidationException';
-import { user as UserModel } from '../database/models/User';
-import { CreateUserDTO } from '@/dtos/create-user.dto';
+import { CreateUserDTO } from '@/dtos/createUser.dto';
 
-import { isNil } from 'lodash';
+import UserService from '@/services/users.service';
+
+import { isEmpty, isNil } from 'lodash';
 
 export class RegistrationValidator {
-  constructor(private user: CreateUserDTO) { }
+  private readonly userService: UserService;
+  constructor(private user: CreateUserDTO) {
+    this.userService = new UserService();
+  }
 
   validate() {
     this.validateInput();
@@ -13,7 +17,21 @@ export class RegistrationValidator {
   }
 
   private validateInput() {
-    if (isNil(this.user)) throw new ValidationError('user', 'Invalid signup data provided!');
+    if (isNil(this.user)) {
+      throw new ValidationError('user', 'Invalid signup data provided!');
+    }
+
+    if (isEmpty(this.user.userName)) {
+      throw new ValidationError('userName', 'Username cannot be emtpy!');
+    }
+
+    if (isEmpty(this.user.email)) {
+      throw new ValidationError('email', 'Email cannot be emtpy!');
+    }
+
+    if (isEmpty(this.user.password)) {
+      throw new ValidationError('password', 'Password cannot be emtpy');
+    }
 
     if (this.user.userName.length > 255) {
       throw new ValidationError('name', 'Username must be shorter than 256 characters!');
@@ -25,7 +43,6 @@ export class RegistrationValidator {
 
     const emailRegexPattern = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
     if (!emailRegexPattern.test(this.user.email)) {
-      console.log(this.user.email);
       throw new ValidationError('email', 'Email must be in xxxx@xxx.xxx format');
     }
 
@@ -35,7 +52,7 @@ export class RegistrationValidator {
   }
 
   private async validateEmailUniqueness() {
-    const emailAlreadyInUse = await UserModel.findOne({ where: { email: this.user.email } });
+    const emailAlreadyInUse = await this.userService.getUser(this.user.email);
 
     if (emailAlreadyInUse) {
       throw new ValidationError('email', 'Email is already in use!');

@@ -3,26 +3,16 @@ import { isNil } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
 
-import { CreateUserDTO } from '@/dtos/create-user.dto';
-import { LoginUserDTO } from '@/dtos/login-user.dto';
+import { CreateUserDTO } from '@/dtos/createUser.dto';
+import { LoginUserDTO } from '@/dtos/loginUser.dto';
 import { HttpException } from '@exceptions/HttpException';
-import { ValidationError } from '../exceptions/ValidationException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
-import { RegistrationValidator } from '@/validators/userRegistrationValidator';
 
 import { user as UserModel } from '../database/models/User';
 
 class AuthService {
-  //TODO Validate input via Validator, extend CreateUserDTO
   public async signup(userData: CreateUserDTO): Promise<User> {
-    try {
-      new RegistrationValidator(userData).validate();
-    } catch (exception) {
-      const e: ValidationError = exception;
-      throw new HttpException(409, e.message);
-    }
-
     const hashedPassword = await hash(userData.password, 10);
     try {
       const createUserData = await UserModel.create({

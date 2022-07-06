@@ -16,6 +16,8 @@ import { DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_HOST, DAT
 import { Dialect } from 'sequelize/types';
 
 import { user } from './database/models/User';
+import { asset } from './database/models/Asset';
+import { nasa_asset } from './database/models/NasaAsset';
 
 class App {
   public app: express.Application;
@@ -98,7 +100,7 @@ class App {
       },
     });
 
-    this.sqlRepo.addModels([user]);
+    this.sqlRepo.addModels([user, asset, nasa_asset]);
   }
 }
 
