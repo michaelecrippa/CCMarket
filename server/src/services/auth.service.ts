@@ -2,23 +2,17 @@ import { hash, compare } from 'bcrypt';
 import { isNil } from 'lodash';
 import { sign } from 'jsonwebtoken';
 import { SECRET_KEY } from '@config';
-import { CreateUserDto } from '@dtos/users.dto';
+
+import { CreateUserDTO } from '@/dtos/createUser.dto';
+import { LoginUserDTO } from '@/dtos/loginUser.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
-import userModel from '@models/users.model';
+
 import { user as UserModel } from '../database/models/User';
 
 class AuthService {
-  public users = userModel;
-
-  //Validate input via Validator, extend CreateUserDTO
-  public async signup(userData: CreateUserDto): Promise<User> {
-    if (isNil(userData)) throw new HttpException(400, 'Invalid signup data provided!');
-
-    const findUser = await UserModel.findOne({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `Email ${userData.email} is already in use!`);
-
+  public async signup(userData: CreateUserDTO): Promise<User> {
     const hashedPassword = await hash(userData.password, 10);
     try {
       const createUserData = await UserModel.create({
@@ -37,7 +31,7 @@ class AuthService {
     }
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: LoginUserDTO): Promise<{ cookie: string; findUser: User }> {
     if (isNil(userData)) throw new HttpException(400, 'Invalid signin data provided!');
 
     const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
@@ -55,7 +49,7 @@ class AuthService {
   public async logout(userData: User): Promise<User> {
     if (isNil(userData)) throw new HttpException(400, "You're not userData");
 
-    const findUser: User = this.users.find(user => user.email === userData.email && user.password === userData.password);
+    const findUser: User = await UserModel.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, "You're not user");
 
     return findUser;

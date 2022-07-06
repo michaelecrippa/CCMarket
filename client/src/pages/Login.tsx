@@ -1,24 +1,33 @@
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { Container, FormControl, Button, InputAdornment, TextField } from '@mui/material';
+import { Container, FormControl, Button, InputAdornment, TextField, Link } from '@mui/material';
 import { Forward, VpnKeyOutlined, AccountCircle } from '@mui/icons-material';
 
 import { authService } from '../services/authService';
+import { UserDTO } from '../models/DTOs/userDTO.model';
+import PagesUriConstnts from '../constants/uriConstants';
 
 export default function Login(): JSX.Element {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [userLoginData, setUserData] = useState(new UserDTO());
 
+  function setEmail(email: string) {
+    setUserData({ email, password: userLoginData.password });
+  }
+  function setPassword(password: string) {
+    setUserData({ email: userLoginData.email, password });
+  }
+  
   const navigate = useNavigate();
 
   async function submit(event: FormEvent) {
     event.preventDefault();
 
-    if(username && password){
+    if (userLoginData.email && userLoginData.password) {
       try {
-        await authService.login({ email: username, password });
-        navigate('../');
+        await authService.login(userLoginData);
+
+        navigate(PagesUriConstnts.IndexUri);
       } catch (error) {
         console.error(error);
       }
@@ -34,7 +43,7 @@ export default function Login(): JSX.Element {
             id='input-email/username'
             placeholder='Email'
             type='username'
-            value={username}
+            value={userLoginData.email}
             InputProps={{
               startAdornment: (
               <InputAdornment position='start'>
@@ -43,14 +52,14 @@ export default function Login(): JSX.Element {
               )
             }}
             inputProps={{'variant': 'outlined'}}
-            onChange={event => setUsername(event.target.value)}
+            onChange={event => setEmail(event.target.value)}
           />
           <TextField
             name='password'
             id='input-password'
             placeholder='Password'
             type='password'
-            value={password}
+            value={userLoginData.password}
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
@@ -70,6 +79,10 @@ export default function Login(): JSX.Element {
           > Log in </Button>
         </FormControl>
       </form>
+
+      <Link href={PagesUriConstnts.RegisterUri} variant="body2">
+        New here? Register now!
+      </Link>
     </Container>
   );
 }

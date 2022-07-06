@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Box } from '@mui/material';
 import { Banner } from '../components/Banner';
 import { EntityCollection } from '../components/EntityCollection';
@@ -86,4 +87,17 @@ export function Home() {
       <EntityCollection entities={entities} />
     </Box>
   );
+=======
+import { Button } from '@mui/material';
+import PagesUriConstnts from '../constants/uriConstants';
+
+export default function Home() {
+  return (
+    <div className="App">
+      <Button variant="contained" href={PagesUriConstnts.UploadUri}>
+        Upload Art
+      </Button>
+    </div>
+  )
+>>>>>>> 3e99699ecd8e1715861d6bd36831175f62bd6705
 }

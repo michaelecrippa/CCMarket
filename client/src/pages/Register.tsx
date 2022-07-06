@@ -2,8 +2,9 @@ import React, { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { userService } from '../services/userService';
+import PagesUriConstnts from '../constants/uriConstants';
 
-import { Button, CircularProgress, Container, TextField, Typography, MenuItem} from '@mui/material';
+import { Button, CircularProgress, Container, TextField, Typography, MenuItem, Link } from '@mui/material';
 
 const genders = [
   {key: 1, value: 'Female'},
@@ -47,7 +48,7 @@ export default function Register() {
     event.preventDefault();
 
     if (await userService.createUser(userInformation)) {
-      navigate('/login');
+      navigate(PagesUriConstnts.LoginUri);
     }
     // TODO add some error handling and notify the user
   }
@@ -71,6 +72,7 @@ export default function Register() {
 
        <form onSubmit={submit}>
         <TextField
+          required
           label="Username"
           onChange={handleFormFieldUpdate('userName')} />
 
@@ -83,18 +85,21 @@ export default function Register() {
           onChange={handleFormFieldUpdate('lastName')} />
 
         <TextField
+          required
           label="Email"
           type='email'
           onChange={handleFormFieldUpdate('email')}
         />
 
         <TextField
+          required
           label="Password"
           onChange={handleFormFieldUpdate('password')}
           type='password'
         />
 
         <TextField
+          required
           label="Confirm password"
           onChange={handleFormFieldUpdate('confirmPassword')}
           type='password'
@@ -128,6 +133,10 @@ export default function Register() {
           {loading ? <CircularProgress /> : 'Submit'}
         </Button>
       </form>
+
+      <Link href={PagesUriConstnts.LoginUri} variant="body2">
+        Already registered? Login now!
+      </Link>
     </Container>
   );
 }

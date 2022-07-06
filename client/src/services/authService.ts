@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { UserDTO } from '../models/DTOs/userDTO.model';
 import { httpService } from './httpService';
 
 export interface UserAuth {
@@ -8,11 +8,6 @@ export interface UserAuth {
   sex?: string,
   nationality?: string,
   token: string
-}
-
-export interface LoginProps {
-  email: string,
-  password: string,
 }
 
 type UserChangeHandler = (user: UserAuth | null) => void;
@@ -25,7 +20,7 @@ export class AuthService {
   }
 
   private setCurrentUser(user: UserAuth | null) {
-    if (!isNil(user)) {
+    if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
     } else {
       localStorage.removeItem('currentUser');
@@ -42,7 +37,7 @@ export class AuthService {
   }
 
   
-  async login({email, password} : LoginProps) {
+  async login({ email, password } : UserDTO) {
     const userAuth = await httpService.post<UserAuth>('login', {
       email,
       password
