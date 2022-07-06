@@ -5,7 +5,8 @@ import { Container, FormControl, Button, InputAdornment, TextField, Link } from 
 import { Forward, VpnKeyOutlined, AccountCircle } from '@mui/icons-material';
 
 import { authService } from '../services/authService';
-import { UserDTO } from '../models/DTOs/user-dto.model';
+import { UserDTO } from '../models/DTOs/userDTO.model';
+import PagesUriConstnts from '../constants/uriConstants';
 
 export default function Login(): JSX.Element {
   const [userLoginData, setUserData] = useState(new UserDTO());
@@ -25,9 +26,8 @@ export default function Login(): JSX.Element {
     if (userLoginData.email && userLoginData.password) {
       try {
         await authService.login(userLoginData);
-        const toIndexUrl = '../';
 
-        navigate(toIndexUrl);
+        navigate(PagesUriConstnts.IndexUri);
       } catch (error) {
         console.error(error);
       }
@@ -80,7 +80,7 @@ export default function Login(): JSX.Element {
         </FormControl>
       </form>
 
-      <Link href="/Register" variant="body2">
+      <Link href={PagesUriConstnts.RegisterUri} variant="body2">
         New here? Register now!
       </Link>
     </Container>

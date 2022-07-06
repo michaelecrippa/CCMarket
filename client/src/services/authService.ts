@@ -1,4 +1,4 @@
-import { UserDTO } from '../models/DTOs/user-dto.model';
+import { UserDTO } from '../models/DTOs/userDTO.model';
 import { httpService } from './httpService';
 
 export interface UserAuth {
