@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
-import './App.css';
-
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Upload from './pages/Upload';
@@ -13,7 +11,7 @@ import { PublicRoute } from './authRoutes/publicRoute';
 import { CurrentUserProvider } from './hooks/useCurrentUser';
 import { Profile } from './pages/Profile';
 
-function App() {
+export function App() {
   return (
     <BrowserRouter>
       <CurrentUserProvider>
@@ -33,5 +31,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

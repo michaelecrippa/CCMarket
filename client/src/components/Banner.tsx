@@ -1,7 +1,8 @@
-import { Box, SxProps } from '@mui/material';
-import React from 'react';
+import { Box } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { Styles } from '../interfaces/styles';
 
-const styles: { [key: string]: SxProps } = {
+const styles: Styles = {
   container: {
     backgroundColor: '#F5E0E0',
     width: '100%',
@@ -9,6 +10,10 @@ const styles: { [key: string]: SxProps } = {
   },
 };
 
-export function Banner() {
-  return <Box sx={styles.container} />;
+interface BannerProps {
+  children?: ReactNode;
+}
+
+export function Banner({ children }: BannerProps) {
+  return <Box sx={styles.container}>{children}</Box>;
 }
