@@ -45,13 +45,15 @@ class AuthService {
     return { cookie, user };
   }
 
-  public async logout(userData: UserDTO): Promise<boolean> {
+  public async logout(userData: LoginUserDTO): Promise<{ cookie: string }> {
     if (isNil(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: DatabaseUserModel = await DatabaseUserModel.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, "You're not user");
 
-    return true;
+    return {
+      cookie: this.createCookie({ token: undefined, expiresIn: 0 } as TokenData),
+    };
   }
 
   public createToken(user: UserDTO): TokenData {

@@ -31,9 +31,6 @@ export class user extends Model {
   updated_at: Date;
 
   @Column
-  token: string;
-
-  @Column
   bio: string;
 
   @HasMany(() => asset)
