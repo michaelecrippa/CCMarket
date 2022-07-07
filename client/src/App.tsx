@@ -11,6 +11,7 @@ import { PrivateRoute } from './authRoutes/privateRoute';
 import { PublicRoute } from './authRoutes/publicRoute';
 
 import { CurrentUserProvider } from './hooks/useCurrentUser';
+import { Profile } from './pages/Profile';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path='/' element={<PrivateRoute />} >
             <Route path='/' element={<Home />} />
             <Route path='/upload' element={<Upload />} />
+            <Route path='/profile' element={<Profile />} />
             <Route path='*' element={<Navigate to='/' replace />} />
           </Route>
           <Route element={<PublicRoute />} >

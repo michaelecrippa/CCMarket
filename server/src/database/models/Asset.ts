@@ -1,4 +1,6 @@
-import { Table, Column, Model } from 'sequelize-typescript';
+import { useContainer } from 'class-validator';
+import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { user } from './User';
 
 @Table
 export class asset extends Model {
@@ -24,6 +26,7 @@ export class asset extends Model {
   description: string;
 
   @Column
+  @ForeignKey(() => user)
   owner_id: number;
 
   @Column

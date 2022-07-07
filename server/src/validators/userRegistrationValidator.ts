@@ -1,7 +1,7 @@
 import { ValidationError } from '../exceptions/ValidationException';
 import { CreateUserDTO } from '@/dtos/createUser.dto';
 
-import UserService from '@/services/users.service';
+import { UserService } from '@/services/users.service';
 
 import { isEmpty, isNil } from 'lodash';
 
@@ -52,7 +52,7 @@ export class RegistrationValidator {
   }
 
   private async validateEmailUniqueness() {
-    const emailAlreadyInUse = await this.userService.getUser(this.user.email);
+    const emailAlreadyInUse = await this.userService.getUserByEmail(this.user.email);
 
     if (emailAlreadyInUse) {
       throw new ValidationError('email', 'Email is already in use!');

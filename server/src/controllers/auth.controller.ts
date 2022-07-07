@@ -42,12 +42,13 @@ class AuthController {
       const { cookie, user } = await this.authService.login(userData);
 
       response
-        .setHeader('Set-Cookie', [cookie])
+        .setHeader('Set-Cookie', [cookie]);
+      response
         .status(200)
         .json({
           data: this.userTransfomer.transform(user),
           message: 'login',
-        });
+        })
     } catch (error) {
       next(error);
     }
@@ -58,7 +59,11 @@ class AuthController {
       const userData: LoginUserDTO = request.body;
       const { cookie } = await this.authService.logout(userData);
 
-      response.setHeader('Set-Cookie', [cookie]).status(200).json({ message: 'Logged out user!' });
+      response
+        .setHeader('Set-Cookie', [cookie]);
+      response
+        .status(200)
+        .json({ message: 'Logged out user!' });
     } catch (error) {
       next(error);
     }
