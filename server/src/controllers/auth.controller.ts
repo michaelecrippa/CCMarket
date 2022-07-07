@@ -2,14 +2,17 @@ import { NextFunction, Request, Response } from 'express';
 
 import { CreateUserDTO } from '@/dtos/createUser.dto';
 import { RequestWithUser } from '@interfaces/auth.interface';
-import { User } from '@interfaces/users.interface';
+import { user as DatabaseUserModel } from '@/database/models/User';
 import AuthService from '@services/auth.service';
 import { HttpException } from '@exceptions/HttpException';
 import { ValidationError } from '@exceptions/ValidationException';
 import { RegistrationValidator } from '@/validators/userRegistrationValidator';
+import { UserTransformer } from '@/transformers/UserTransformer';
+import { LoginUserDTO } from '@/dtos/loginUser.dto';
 
 class AuthController {
-  public authService = new AuthService();
+  private authService = new AuthService();
+  private userTransfomer = new UserTransformer();
 
   public signUp = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
@@ -22,9 +25,12 @@ class AuthController {
         throw new HttpException(409, e.message);
       }
 
-      const signUpUserData: User = await this.authService.signup(userData);
+      const signUpUserData: DatabaseUserModel = await this.authService.signup(userData);
 
-      response.status(201).json({ data: signUpUserData, message: 'signup' });
+      response.status(201).json({
+        data: this.userTransfomer.transform(signUpUserData),
+        message: 'signup',
+      });
     } catch (error) {
       next(error);
     }
@@ -32,24 +38,27 @@ class AuthController {
 
   public logIn = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDTO = request.body;
-      const { cookie, findUser } = await this.authService.login(userData);
+      const userData: LoginUserDTO = request.body;
+      const { cookie, user } = await this.authService.login(userData);
 
-      //set token to authenticate later with
-      //response.setHeader('Set-Cookie', [cookie]);
-      response.status(200).json({ data: findUser, message: 'login' });
+      response
+        .setHeader('Set-Cookie', [cookie])
+        .status(200)
+        .json({
+          data: this.userTransfomer.transform(user),
+          message: 'login',
+        });
     } catch (error) {
       next(error);
     }
   };
 
-  public logOut = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+  public logOut = async (request: RequestWithUser, response: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: User = req.user;
-      const logOutUserData: User = await this.authService.logout(userData);
+      const userData: LoginUserDTO = request.body;
+      const { cookie } = await this.authService.logout(userData);
 
-      //remove auth token as well
-      res.status(200).json({ data: logOutUserData, message: 'logout' });
+      response.setHeader('Set-Cookie', [cookie]).status(200).json({ message: 'Logged out user!' });
     } catch (error) {
       next(error);
     }

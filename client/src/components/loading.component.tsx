@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 
-import { LoadingProps } from '../interfaces/components/Loading';
+import { LoadingProps } from '../interfaces/components/Loading.interface';
 
 export function Loading<T>({ loading, error, children }: LoadingProps<T>) {
   if (loading) {

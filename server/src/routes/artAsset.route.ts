@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import ArtController from '@/controllers/art.controller';
 import { Routes } from '@interfaces/routes.interface';
+import { authMiddleware } from '@/middlewares/auth.middleware';
 
 class ArtAssetRoute implements Routes {
   public path = '/';
@@ -12,7 +13,7 @@ class ArtAssetRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}uploadArt`, this.artController.uploadArt);
+    this.router.post(`${this.path}uploadArt`, authMiddleware, this.artController.uploadArt);
   }
 }
 
