@@ -11,7 +11,7 @@ import { PrivateRoute } from './authRoutes/privateRoute';
 import { PublicRoute } from './authRoutes/publicRoute';
 
 import { CurrentUserProvider } from './hooks/useCurrentUser';
-import Profile from './pages/Profile';
+import { Profile } from './pages/Profile';
 
 function App() {
   return (
