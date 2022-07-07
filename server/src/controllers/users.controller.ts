@@ -18,13 +18,12 @@ class UsersController {
   //   }
   // };
 
-  // TODO: we could use query parameter for asset inclusion
   public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = Number(req.params.id);
       const userData: DatabaseUserModel = await this.userService.getUserById(userId);
 
-      res.status(200).json({ data: this.userTransofmer.transform(userData), message: 'findOne' });
+      res.status(200).json({ data: this.userTransofmer.transformWithAssets(userData), message: 'findOne' });
     } catch (error) {
       next(error);
     }
