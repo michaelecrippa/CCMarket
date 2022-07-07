@@ -6,7 +6,7 @@ type UserChangeHandler = (user: UserAuth | undefined) => void;
 
 export class AuthService {
   private handler: UserChangeHandler | undefined = undefined;
-  
+
   set changeHandler(handler: UserChangeHandler | undefined) {
     this.handler = handler;
   }
@@ -23,22 +23,24 @@ export class AuthService {
 
   get storedUser(): UserAuth | undefined {
     const userJson = localStorage.getItem('currentUser');
-    const currentUser: UserAuth =  userJson && JSON.parse(userJson);  
+    const currentUser: UserAuth = userJson && JSON.parse(userJson);
 
     return currentUser ?? undefined;
   }
 
-  
-  async login({ email, password } : UserDTO) {
+  async login({ email, password }: UserDTO) {
     const userAuth = await httpService.post<UserAuth>('login', {
       email,
-      password
+      password,
     });
 
     this.setCurrentUser(userAuth);
   }
 
-  logout() {
+  async logout({ email }: Partial<UserDTO>) {
+    await httpService.post('logout', {
+      email,
+    });
     this.setCurrentUser(undefined);
   }
 }

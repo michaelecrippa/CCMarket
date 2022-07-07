@@ -45,7 +45,7 @@ class AuthService {
     return { cookie, user };
   }
 
-  public async logout(userData: LoginUserDTO): Promise<{ cookie: string }> {
+  public async logout(userData: Partial<LoginUserDTO>): Promise<{ cookie: string }> {
     if (isNil(userData)) throw new HttpException(400, "You're not userData");
 
     const findUser: DatabaseUserModel = await DatabaseUserModel.findOne({ where: { email: userData.email } });
