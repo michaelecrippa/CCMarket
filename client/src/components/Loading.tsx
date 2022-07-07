@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 
-import { LoadingProps } from '../interfaces/components/Loading.interface';
+import { LoadingProps } from '../interfaces/components/Loading';
 
 export function Loading<T>({ loading, error, children }: LoadingProps<T>) {
   if (loading) {
@@ -12,7 +12,11 @@ export function Loading<T>({ loading, error, children }: LoadingProps<T>) {
   }
 
   if (error) {
-    return <Box m={4} textAlign="center" color="red">{error.message}</Box>;
+    return (
+      <Box m={4} textAlign="center" color="red">
+        {error.message}
+      </Box>
+    );
   }
 
   return <>{children}</>;

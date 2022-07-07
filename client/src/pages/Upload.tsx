@@ -15,7 +15,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 
-import NasaAssetSelection from '../components/nasaAssetSelection.component';
+import NasaAssetSelection from '../components/NasaAssetSelection';
 
 import { artEntityService } from '../services/artEntityService';
 import { ArtEntityDTO } from '../models/DTOs/artDTO.model';
@@ -23,7 +23,7 @@ import { ArtEntityDTO } from '../models/DTOs/artDTO.model';
 import PagesUriConstnts from '../constants/uriConstants';
 import { Header } from '../components/Header';
 
-export default function Upload(): JSX.Element {
+export function Upload(): JSX.Element {
   const [entityData, setEntityData] = useState(new ArtEntityDTO());
   const navigate = useNavigate();
 

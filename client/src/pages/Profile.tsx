@@ -4,7 +4,7 @@ import { UserProfileDto } from '../models/DTOs/user-profile-dto.model';
 import { userService } from '../services/userService';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import { Styles } from '../interfaces/styles';
-import { AssetContainer } from '../components/assetContainer.component';
+import { AssetContainer } from '../components/AssetContainer';
 import { Header } from '../components/Header';
 
 const styles: Styles = {

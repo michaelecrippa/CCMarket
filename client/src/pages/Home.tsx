@@ -3,7 +3,7 @@ import PagesUriConstnts from '../constants/uriConstants';
 import { Box } from '@mui/material';
 import { Banner } from '../components/Banner';
 import { Header } from '../components/Header';
-import { AssetContainer } from '../components/assetContainer.component';
+import { AssetContainer } from '../components/AssetContainer';
 
 export function Home() {
   return (

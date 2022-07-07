@@ -1,7 +1,7 @@
 import { authService } from '../services/authService';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { UserAuth } from '../interfaces/user/UserAuth.interface';
-import { CurrentUserProviderProps } from '../interfaces/components/UserProviderProps.interface';
+import { CurrentUserProviderProps } from '../interfaces/components/UserProviderProps';
 
 const CurrentUserContext = createContext<UserAuth | undefined>(undefined);
 

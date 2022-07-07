@@ -1,7 +1,7 @@
 import { nasaEntityService } from '../services/nasaEntityService';
 import { NasaEntityDTO } from '../models/DTOs/nasaDTO.model';
-import { Loading } from './loading.component';
-import { NasaAssetSelectionState, NasaAssetSelectionProps } from '../interfaces/components/NasaAssetSelection.interface';
+import { Loading } from './Loading';
+import { NasaAssetSelectionState, NasaAssetSelectionProps } from '../interfaces/components/NasaAssetSelection';
 
 import { TextField, MenuItem } from '@mui/material';
 import { useEffect, useState } from 'react';

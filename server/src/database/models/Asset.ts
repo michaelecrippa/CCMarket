@@ -1,5 +1,4 @@
-import { useContainer } from 'class-validator';
-import { Table, Column, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey } from 'sequelize-typescript';
 import { user } from './User';
 
 @Table

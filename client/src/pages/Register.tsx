@@ -7,16 +7,16 @@ import PagesUriConstnts from '../constants/uriConstants';
 import { Button, CircularProgress, Container, TextField, Typography, MenuItem, Link } from '@mui/material';
 
 const genders = [
-  {key: 1, value: 'Female'},
-  {key: 2, value: 'Male'},
-  {key: 3, value: 'Other'},
+  { key: 1, value: 'Female' },
+  { key: 2, value: 'Male' },
+  { key: 3, value: 'Other' },
 ];
 
 const nations = [
-  {key: 1, value: 'Bulgarian'},
-  {key: 2, value: 'Italian'},
+  { key: 1, value: 'Bulgarian' },
+  { key: 2, value: 'Italian' },
   //TODO and extract
-]
+];
 
 interface UserInformation {
   userName: string;
@@ -29,7 +29,7 @@ interface UserInformation {
   nationality: string;
 }
 
-export default function Register() {
+export function Register() {
   let loading = false; // TODO show loading indicator until response received
 
   const navigate = useNavigate();
@@ -37,11 +37,11 @@ export default function Register() {
     userName: '',
     firstName: '',
     lastName: '',
-    email:'',
-    password:'',
+    email: '',
+    password: '',
     confirmPassword: '',
     sex: '',
-    nationality: ''
+    nationality: '',
   } as UserInformation);
 
   async function submit(event: FormEvent) {
@@ -53,80 +53,49 @@ export default function Register() {
     // TODO add some error handling and notify the user
   }
 
-  function handleFormFieldUpdate(inputFieldName: keyof UserInformation) { 
+  function handleFormFieldUpdate(inputFieldName: keyof UserInformation) {
     return (valueUpdatedEvent: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setUserInformation(userInformation => {
         userInformation[inputFieldName] = valueUpdatedEvent.target.value;
         return userInformation;
-      })
-    }
+      });
+    };
   }
 
   return (
-     <Container maxWidth="sm">
-        <Typography
-          component="h1"
-          variant="h4"
-          align="center">Sign up
-        </Typography>
+    <Container maxWidth="sm">
+      <Typography component="h1" variant="h4" align="center">
+        Sign up
+      </Typography>
 
-       <form onSubmit={submit}>
-        <TextField
-          required
-          label="Username"
-          onChange={handleFormFieldUpdate('userName')} />
+      <form onSubmit={submit}>
+        <TextField required label="Username" onChange={handleFormFieldUpdate('userName')} />
 
-         <TextField
-          label="First Name"
-          onChange={handleFormFieldUpdate('firstName')} />
+        <TextField label="First Name" onChange={handleFormFieldUpdate('firstName')} />
 
-        <TextField
-          label="Last Name"
-          onChange={handleFormFieldUpdate('lastName')} />
+        <TextField label="Last Name" onChange={handleFormFieldUpdate('lastName')} />
 
-        <TextField
-          required
-          label="Email"
-          type='email'
-          onChange={handleFormFieldUpdate('email')}
-        />
+        <TextField required label="Email" type="email" onChange={handleFormFieldUpdate('email')} />
 
-        <TextField
-          required
-          label="Password"
-          onChange={handleFormFieldUpdate('password')}
-          type='password'
-        />
+        <TextField required label="Password" onChange={handleFormFieldUpdate('password')} type="password" />
 
-        <TextField
-          required
-          label="Confirm password"
-          onChange={handleFormFieldUpdate('confirmPassword')}
-          type='password'
-        />
+        <TextField required label="Confirm password" onChange={handleFormFieldUpdate('confirmPassword')} type="password" />
 
-        <TextField
-          label="Gender"
-          onChange={handleFormFieldUpdate('sex')}
-          select
-        > 
-          {genders.map((option) => (
+        <TextField label="Gender" onChange={handleFormFieldUpdate('sex')} select>
+          {genders.map(option => (
             <MenuItem key={option.key} value={option.value}>
               {option.value}
             </MenuItem>
           ))}
         </TextField>
 
-        <TextField
-          label="Nationality"
-          onChange={handleFormFieldUpdate('nationality')}
-          select
-        > 
-          {nations && nations.map((option) => (
-            <MenuItem key={option.key} value={option.value}>
-              {option.value}
-            </MenuItem>
-          ))}
+        <TextField label="Nationality" onChange={handleFormFieldUpdate('nationality')} select>
+          {nations &&
+            nations.map(option => (
+              <MenuItem key={option.key} value={option.value}>
+                {option.value}
+              </MenuItem>
+            ))}
         </TextField>
 
         <Button type="submit" variant="contained" disabled={loading}>
