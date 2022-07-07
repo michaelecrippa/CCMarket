@@ -5,6 +5,7 @@ import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Upload from './pages/Upload';
+import { Home } from './pages/Home';
 
 import { PrivateRoute } from './authRoutes/privateRoute';
 import { PublicRoute } from './authRoutes/publicRoute';

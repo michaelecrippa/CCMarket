@@ -14,12 +14,10 @@ export function CurrentUserProvider({ children }: CurrentUserProviderProps) {
 
   useEffect(() => {
     authService.changeHandler = setUser;
-    return () => { authService.changeHandler = undefined };
+    return () => {
+      authService.changeHandler = undefined;
+    };
   });
 
-  return (
-    <CurrentUserContext.Provider value={user}>
-      {children}
-    </CurrentUserContext.Provider>
-  );
+  return <CurrentUserContext.Provider value={user}>{children}</CurrentUserContext.Provider>;
 }
