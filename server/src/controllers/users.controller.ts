@@ -1,9 +1,12 @@
-import { User } from '@/interfaces/users.interface';
-import userService from '@services/users.service';
-import { NextFunction, Request, Response } from 'express';
+import { UserService } from '@services/users.service';
+import { Request, Response, NextFunction } from 'express';
+import { user as DatabaseUserModel } from '@/database/models/User';
+import { UserTransformer } from '@/transformers/UserTransformer';
 
 class UsersController {
-  public userService = new userService();
+  public userService = new UserService();
+
+  private userTransofmer = new UserTransformer();
 
   // public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   //   try {
@@ -15,16 +18,18 @@ class UsersController {
   //   }
   // };
 
-  // public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  //   try {
-  //     const userId = Number(req.params.id);
-  //     const findOneUserData: User = await this.userService.findUserById(userId);
+  // TODO: we could use query parameter for asset inclusion
+  public getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = Number(req.params.id);
+      const userData: DatabaseUserModel = await this.userService.getUserById(userId);
 
-  //     res.status(200).json({ data: findOneUserData, message: 'findOne' });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
+      res.status(200).json({ data: this.userTransofmer.transform(userData), message: 'findOne' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
 
   // public updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   //   try {
