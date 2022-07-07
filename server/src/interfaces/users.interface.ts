@@ -1,3 +1,5 @@
+import { Asset } from "./assets.interface";
+
 export interface User {
   id: number;
   email: string;
@@ -6,7 +8,5 @@ export interface User {
   lastName?: string;
   profilePicture?: string;
   bio?: string;
-
-  // TODO: make a separate ArtAssetDTO for assets[]. 
-  assets?: object[];
+  assets?: Asset[];
 }

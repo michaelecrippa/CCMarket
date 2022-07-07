@@ -11,7 +11,6 @@ export class UserService {
     }
   }
 
-  // TODO: modify function to include assets optionally with a boolean flag
   public getUserById(userId: number): Promise<UserModel> {
     try {
       return UserModel.findOne({ where: { id: userId }, include: asset });
