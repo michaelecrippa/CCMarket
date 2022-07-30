@@ -28,7 +28,7 @@ const styles: Styles = {
   },
 
   bio: {
-    width: '35%',
+    width: '30%',
   },
 
   assetsTitle: {
